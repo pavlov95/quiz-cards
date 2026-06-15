@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>QuizCards — Study Smarter</title>
+
+    <link rel="stylesheet" th:href="@{/css/index.css}">
+</head>
+<body>
+
+<header class="site-header">
+    <a th:href="@{/}" class="logo">
+        <span class="logo-icon">Q</span>
+        <span>QuizCards</span>
+    </a>
+
+    <nav class="nav-actions">
+        <a th:href="@{/login}" class="nav-link">Sign in</a>
+        <a th:href="@{/register}" class="nav-button">Create account</a>
+    </nav>
+</header>
+
+<main class="hero">
+    <section class="hero-content">
+        <p class="eyebrow">Flashcards made simple</p>
+
+        <h1>Study smarter, not harder.</h1>
+
+        <p class="hero-description">
+            Create your own decks, add cards, mark difficult questions,
+            and study with a focused random-card mode.
+        </p>
+
+        <div class="btn-group">
+            <a th:href="@{/register}" class="btn btn-primary">Create account</a>
+            <a th:href="@{/login}" class="btn btn-secondary">Sign in</a>
+        </div>
+
+        <div class="features">
+            <div class="feature">
+                <strong>Create decks</strong>
+                <span>Organize cards by topic.</span>
+            </div>
+
+            <div class="feature">
+                <strong>Mark difficult cards</strong>
+                <span>Focus on what needs work.</span>
+            </div>
+
+            <div class="feature">
+                <strong>Study public decks</strong>
+                <span>Learn from shared decks.</span>
+            </div>
+        </div>
+    </section>
+
+    <section class="hero-preview" aria-label="QuizCards preview">
+        <div class="card card-back"></div>
+
+        <div class="card card-front">
+            <div class="card-top">
+                <span class="tag">Difficult</span>
+                <span class="dots">•••</span>
+            </div>
+
+            <h2>What does MVC stand for?</h2>
+
+            <div class="answer-box">
+                <span>Show answer</span>
+                <p>Model — View — Controller</p>
+            </div>
+
+            <button type="button" class="next-card-button">Next Card</button>
+        </div>
+    </section>
+</main>
+
+<footer class="site-footer">
+    <span>&copy; 2026 QuizCards &mdash; SoftUni Project</span>
+</footer>
+
+</body>
+</html>
+```
