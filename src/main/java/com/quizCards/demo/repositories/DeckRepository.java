@@ -12,5 +12,15 @@ import java.util.UUID;
 
 @Repository
 public interface DeckRepository extends JpaRepository<Deck, UUID> {
+    List<Deck> findAllByCreatedById(UUID userId);
+
+    @Query("""
+        SELECT d
+        FROM Deck d
+        WHERE d.isPublic = true
+        AND d.createdBy.id <> :userId
+        ORDER BY function('RAND')
+    """)
+    List<Deck> findRandomPublicDecksExcludingUser(@Param("userId") UUID userId, Pageable pageable);
 
 }

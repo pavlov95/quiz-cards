@@ -24,5 +24,76 @@ public class DeckService {
         this.userService = userService;
     }
 
+    public List<Deck> getDecksByUser(UUID userId){
+        return deckRepository.findAllByCreatedById(userId);
+    }
 
+    public List<Deck> getRandomDecksNotByUser(UUID userId, int count) {
+       return deckRepository.findRandomPublicDecksExcludingUser(userId, PageRequest.of(0, count));
+
+    }
+
+
+    public Deck createDeck(DeckRequest deckRequest, UUID userId) {
+        User user = userService.findUserById(userId);
+
+        Deck deck = Deck.builder()
+                .name(deckRequest.getName())
+                .description(deckRequest.getDescription())
+                .isPublic(deckRequest.getIsPublic())
+                .createdBy(user)
+                .createdOn(LocalDateTime.now())
+                .updatedOn(LocalDateTime.now())
+                .build();
+        return deckRepository.save(deck);
+    }
+
+    public Deck getDeckById(UUID id) {
+         return deckRepository.findById(id).orElseThrow(UnauthorizedDeckAccessException::new);
+    }
+
+    @Transactional
+    public void deleteDeck(UUID deckId, UUID userId) {
+        Deck deck = deckRepository.findById(deckId)
+                .orElseThrow(() -> new DeckNotFoundException(deckId));
+
+        if (!deck.getCreatedBy().getId().equals(userId)) {
+            throw new UnauthorizedDeckAccessException();
+        }
+
+        deckRepository.delete(deck);
+    }
+
+    public void editDeck(DeckRequest deckRequest, UUID deckId, UUID userId) {
+        Deck deck = deckRepository.findById(deckId).orElseThrow(() -> new DeckNotFoundException(deckId));
+        if(!deck.getCreatedBy().getId().equals(userId)){
+           throw new UnauthorizedDeckAccessException();
+        }
+        deck.setName(deckRequest.getName());
+        deck.setPublic(deckRequest.getIsPublic());
+        deck.setDescription(deck.getDescription());
+        deck.setUpdatedOn(LocalDateTime.now());
+        deckRepository.save(deck);
+    }
+
+    public DeckRequest getDeckRequestForEdit(UUID deckId, UUID userId) {
+        Deck deck = deckRepository.findById(deckId)
+                .orElseThrow(() -> new DeckNotFoundException(deckId));
+
+        if (!deck.getCreatedBy().getId().equals(userId)) {
+            throw new UnauthorizedDeckAccessException();
+        }
+
+        DeckRequest deckRequest = new DeckRequest();
+        deckRequest.setName(deck.getName());
+        deckRequest.setDescription(deck.getDescription());
+        deckRequest.setIsPublic(deck.isPublic());
+
+        return deckRequest;
+    }
+
+    public void updateDeck(Deck deck){
+        deck.setUpdatedOn(LocalDateTime.now());
+        deckRepository.save(deck);
+    }
 }
