@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login — QuizCards</title>
+
+    <link rel="stylesheet" th:href="@{/css/auth.css}">
+</head>
+<body>
+
+<header class="site-header">
+    <a th:href="@{/}" class="logo">
+        <span class="logo-icon">Q</span>
+        <span>QuizCards</span>
+    </a>
+
+    <a th:href="@{/register}" class="header-link">Create account</a>
+</header>
+
+<main class="auth-page">
+    <section class="auth-card">
+        <div class="auth-header">
+            <p class="eyebrow">Welcome back</p>
+            <h1>Sign in to your account.</h1>
+            <p>Continue building decks, reviewing cards, and studying smarter.</p>
+        </div>
+
+        <form th:action="@{/login}" method="post" th:object="${loginRequest}" class="auth-form">
+
+            <div class="alert" th:if="${errorMessage}" th:text="${errorMessage}">
+                Invalid username or password.
+            </div>
+
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input id="username"
+                       type="text"
+                       autofocus
+                       placeholder="Enter your username"
+                       th:field="*{username}"
+                       th:classappend="${#fields.hasErrors('username')} ? 'input-error' : ''">
+
+                <span class="field-error"
+                      th:if="${#fields.hasErrors('username')}"
+                      th:errors="*{username}">
+                    Username error
+                </span>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input id="password"
+                       type="password"
+                       placeholder="Enter your password"
+                       th:field="*{password}"
+                       th:classappend="${#fields.hasErrors('password')} ? 'input-error' : ''">
+
+                <span class="field-error"
+                      th:if="${#fields.hasErrors('password')}"
+                      th:errors="*{password}">
+                    Password error
+                </span>
+            </div>
+
+            <button type="submit" class="btn btn-primary">
+                Sign in
+            </button>
+        </form>
+
+        <p class="auth-switch">
+            Don’t have an account?
+            <a th:href="@{/register}">Create one</a>
+        </p>
+    </section>
+
+    <section class="auth-preview" aria-label="QuizCards preview">
+        <div class="preview-card preview-card-back"></div>
+
+        <div class="preview-card preview-card-front">
+            <span class="tag">Study mode</span>
+
+            <h2>Ready for your next card?</h2>
+
+            <div class="mini-card">
+                <span>Question</span>
+                <p>What does JPA stand for?</p>
+            </div>
+
+            <div class="mini-answer">
+                <span>Answer</span>
+                <p>Java Persistence API</p>
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer class="site-footer">
+    <span>&copy; 2026 QuizCards &mdash; SoftUni Project</span>
+</footer>
+
+</body>
+</html>

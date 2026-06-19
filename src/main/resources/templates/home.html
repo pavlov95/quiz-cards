@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home — QuizCards</title>
+
+    <link rel="stylesheet" th:href="@{/css/home.css}">
+</head>
+<body>
+
+<header class="site-header">
+    <a th:href="@{/home}" class="logo">
+        <span class="logo-icon">Q</span>
+        <span>QuizCards</span>
+    </a>
+
+    <nav class="nav-actions">
+        <a th:href="@{/decks/create}" class="nav-link">Create deck</a>
+        <form th:action="@{/logout}" method="post" class="logout-form">
+            <button type="submit" class="nav-button">Logout</button>
+        </form>
+    </nav>
+</header>
+
+<main class="dashboard">
+
+    <section class="welcome-section">
+        <div>
+            <p class="eyebrow">Dashboard</p>
+            <h1>Welcome back.</h1>
+            <p class="welcome-text">
+                Continue studying your decks or discover public decks created by other users.
+            </p>
+        </div>
+
+        <a th:href="@{/decks/create}" class="btn btn-primary">
+            Create deck
+        </a>
+    </section>
+
+    <section class="content-grid">
+
+        <div class="dashboard-section">
+            <div class="section-header">
+                <div>
+                    <h2>My Decks</h2>
+                    <p>Your personal flashcard collections.</p>
+                </div>
+            </div>
+
+            <div th:if="${myDecks.isEmpty()}" class="empty-state">
+                <div class="empty-icon">+</div>
+                <h3>No decks yet</h3>
+                <p>Create your first deck and start adding cards.</p>
+                <a th:href="@{/decks/create}" class="btn btn-secondary">
+                    Create your first deck
+                </a>
+            </div>
+
+            <div th:if="${!myDecks.isEmpty()}" class="deck-list">
+                <article class="deck-card" th:each="deck : ${myDecks}">
+                    <div class="deck-card-top">
+                        <span class="deck-badge">My deck</span>
+                        <span class="card-count" th:text="${deck.totalCards} + ' cards'">42 cards</span>
+                    </div>
+
+                    <h3 th:text="${deck.name}">Java Basics</h3>
+
+                    <p th:text="${deck.description}">
+                        Short deck description goes here.
+                    </p>
+
+                    <div class="deck-actions">
+                        <a th:href="@{/decks/{id}(id=${deck.id})}" class="btn-small btn-outline">
+                            View
+                        </a>
+
+                        <a th:href="@{/decks/{id}/study(id=${deck.id})}" class="btn-small btn-dark">
+                            Study
+                        </a>
+                    </div>
+                </article>
+            </div>
+        </div>
+
+        <div class="dashboard-section">
+            <div class="section-header">
+                <div>
+                    <h2>Public Decks</h2>
+                    <p>Random public decks you can study.</p>
+                </div>
+            </div>
+
+            <div th:if="${randomDecks.isEmpty()}" class="empty-state">
+                <div class="empty-icon">?</div>
+                <h3>No public decks found</h3>
+                <p>There are no public decks available right now.</p>
+            </div>
+
+            <div th:if="${!randomDecks.isEmpty()}" class="deck-list">
+                <article class="deck-card public-card" th:each="deck : ${randomDecks}">
+                    <div class="deck-card-top">
+                        <span class="deck-badge public">Public</span>
+                        <span class="card-count" th:text="${deck.totalCards} + ' cards'">42 cards</span>
+                    </div>
+
+                    <h3 th:text="${deck.name}">Spring MVC</h3>
+
+                    <p th:text="${deck.description}">
+                        Public deck description goes here.
+                    </p>
+
+                    <div class="deck-actions">
+                        <a th:href="@{/decks/{id}(id=${deck.id})}" class="btn-small btn-outline">
+                            View
+                        </a>
+
+                        <a th:href="@{/decks/{id}/study(id=${deck.id})}" class="btn-small btn-dark">
+                            Study
+                        </a>
+                    </div>
+                </article>
+            </div>
+        </div>
+
+    </section>
+
+</main>
+
+<footer class="site-footer">
+    <span>&copy; 2026 QuizCards &mdash; SoftUni Project</span>
+</footer>
+
+</body>
+</html>
