@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Access Denied — QuizCards</title>
+
+    <link rel="stylesheet" th:href="@{/css/error.css}">
+</head>
+<body>
+
+<header class="site-header">
+    <a th:href="@{/}" class="logo">
+        <span class="logo-icon">Q</span>
+        <span>QuizCards</span>
+    </a>
+</header>
+
+<main class="error-page">
+
+    <section class="error-card">
+
+        <div class="error-visual" aria-hidden="true">
+            <div class="error-code">403</div>
+
+            <div class="flashcard flashcard-back">
+                <span>Private deck</span>
+                <strong>Access restricted</strong>
+            </div>
+
+            <div class="flashcard flashcard-front">
+                <span>Permission</span>
+                <strong>You cannot open this deck</strong>
+            </div>
+        </div>
+
+        <div class="error-content">
+            <p class="eyebrow">Access denied</p>
+
+            <h1>You don’t have permission to view this deck.</h1>
+
+            <p class="error-description">
+                This deck is private or belongs to another user. You can return
+                to the dashboard and continue studying decks available to you.
+            </p>
+
+            <div class="error-actions">
+                <a th:href="@{/home}" class="btn btn-primary">
+                    Return to dashboard
+                </a>
+
+                <a th:href="@{/}" class="btn btn-secondary">
+                    Go to home page
+                </a>
+            </div>
+
+            <p class="support-message">
+                Only the deck owner can modify or access private deck content.
+            </p>
+        </div>
+
+    </section>
+
+</main>
+
+<footer class="site-footer">
+    <span>&copy; 2026 QuizCards &mdash; SoftUni Project</span>
+</footer>
+
+</body>
+</html>

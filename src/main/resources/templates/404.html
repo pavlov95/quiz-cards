@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Deck Not Found — QuizCards</title>
+
+    <link rel="stylesheet" th:href="@{/css/error.css}">
+</head>
+<body>
+
+<header class="site-header">
+    <a th:href="@{/}" class="logo">
+        <span class="logo-icon">Q</span>
+        <span>QuizCards</span>
+    </a>
+</header>
+
+<main class="error-page">
+
+    <section class="error-card">
+
+        <div class="error-visual" aria-hidden="true">
+            <div class="error-code">404</div>
+
+            <div class="flashcard flashcard-back">
+                <span>Deck</span>
+                <strong>Nothing found here</strong>
+            </div>
+
+            <div class="flashcard flashcard-front">
+                <span>Question</span>
+                <strong>Where did this deck go?</strong>
+            </div>
+        </div>
+
+        <div class="error-content">
+            <p class="eyebrow">Deck not found</p>
+
+            <h1>This deck could not be found.</h1>
+
+            <p class="error-description">
+                The deck may have been deleted, moved, or the address may be
+                incorrect. Return to your dashboard and choose another deck.
+            </p>
+
+            <div class="error-actions">
+                <a th:href="@{/home}" class="btn btn-primary">
+                    Return to dashboard
+                </a>
+
+                <a th:href="@{/}" class="btn btn-secondary">
+                    Go to home page
+                </a>
+            </div>
+
+            <p class="support-message">
+                Check that the deck link is correct before trying again.
+            </p>
+        </div>
+
+    </section>
+
+</main>
+
+<footer class="site-footer">
+    <span>&copy; 2026 QuizCards &mdash; SoftUni Project</span>
+</footer>
+
+</body>
+</html>
