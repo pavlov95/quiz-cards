@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Deck — QuizCards</title>
+
+    <link rel="stylesheet" th:href="@{/css/deck-form.css}">
+</head>
+<body>
+
+<header class="site-header">
+    <a th:href="@{/home}" class="logo">
+        <span class="logo-icon">Q</span>
+        <span>QuizCards</span>
+    </a>
+
+    <a th:href="@{/home}" class="header-link">Back to dashboard</a>
+</header>
+
+<main class="form-page">
+    <section class="form-card">
+        <div class="form-header">
+            <p class="eyebrow">New deck</p>
+            <h1>Create a study deck.</h1>
+            <p>
+                Give your deck a clear name, describe what it helps you study,
+                and choose whether other users can access it.
+            </p>
+        </div>
+
+        <form th:action="@{/decks/create}"
+              method="post"
+              th:object="${deckRequest}"
+              class="deck-form">
+
+            <div class="form-group">
+                <label for="name">Deck name</label>
+
+                <input id="name"
+                       type="text"
+                       placeholder="Rulers of England"
+                       th:field="*{name}"
+                       th:classappend="${#fields.hasErrors('name')} ? 'input-error' : ''">
+
+                <span class="field-error"
+                      th:if="${#fields.hasErrors('name')}"
+                      th:errors="*{name}">
+                    Deck name error
+                </span>
+            </div>
+
+            <div class="form-group">
+                <label for="description">Deck description</label>
+
+                <textarea id="description"
+                          rows="5"
+                          placeholder="The names of all kings and queens of England"
+                          th:field="*{description}"
+                          th:classappend="${#fields.hasErrors('description')} ? 'input-error' : ''"></textarea>
+
+                <span class="field-error"
+                      th:if="${#fields.hasErrors('description')}"
+                      th:errors="*{description}">
+                    Description error
+                </span>
+            </div>
+
+            <div class="form-group">
+                <label>Deck visibility</label>
+
+                <div class="radio-grid">
+                    <label class="radio-card" for="publicDeck">
+                        <input id="publicDeck"
+                               type="radio"
+                               th:field="*{isPublic}"
+                               value="true">
+                        <span>
+                            <strong>Public</strong>
+                            <small>Other users can view and study this deck.</small>
+                        </span>
+                    </label>
+
+                    <label class="radio-card" for="privateDeck">
+                        <input id="privateDeck"
+                               type="radio"
+                               th:field="*{isPublic}"
+                               value="false">
+                        <span>
+                            <strong>Private</strong>
+                            <small>Only you can access this deck.</small>
+                        </span>
+                    </label>
+                </div>
+
+                <span class="field-error"
+                      th:if="${#fields.hasErrors('isPublic')}"
+                      th:errors="*{isPublic}">
+                    Visibility error
+                </span>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">
+                    Create Deck
+                </button>
+
+                <a th:href="@{/home}" class="btn btn-secondary">
+                    Cancel
+                </a>
+            </div>
+        </form>
+    </section>
+
+    <section class="preview-panel" aria-label="Deck preview">
+        <div class="preview-card preview-card-back"></div>
+
+        <div class="preview-card preview-card-front">
+            <span class="tag">Deck preview</span>
+
+            <h2>History: Rulers of England</h2>
+
+            <div class="mini-info">
+                <span>Description</span>
+                <p>Names, dates, and key facts for each ruler.</p>
+            </div>
+
+            <div class="mini-stats">
+                <div>
+                    <strong>0</strong>
+                    <span>Cards</span>
+                </div>
+
+                <div>
+                    <strong>Public</strong>
+                    <span>Visibility</span>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer class="site-footer">
+    <span>&copy; 2026 QuizCards &mdash; SoftUni Project</span>
+</footer>
+
+</body>
+</html>
+
