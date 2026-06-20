@@ -23,4 +23,105 @@ public class CardService {
         this.deckService = deckService;
     }
 
+    public List<Card> findAllCardsByDeckId(UUID deckId) {
+        return cardRepository.findAllByDeckId(deckId);
+    }
+
+    @Transactional
+    public void createCard(CardRequest cardRequest, UUID deckId, UUID userId) {
+        Deck deck = deckService.getDeckById(deckId);
+
+        if (!deck.getCreatedBy().getId().equals(userId)) {
+            throw new UnauthorizedDeckAccessException();
+        }
+        Card card = Card.builder()
+                .question(cardRequest.getQuestion())
+                .answer(cardRequest.getAnswer())
+                .link(cardRequest.getLink())
+                .deck(deck)
+                .isDifficult(cardRequest.getIsDifficult())
+                .createdOn(LocalDateTime.now())
+                .updatedOn(LocalDateTime.now())
+                .build();
+        deckService.updateDeck(deck);
+        cardRepository.save(card);
+
+    }
+    public CardRequest getCardRequestForEdit(UUID cardId, UUID deckId, UUID userId) {
+        Card card = cardRepository.findById(cardId)
+                .orElseThrow(() -> new CardNotFoundException(cardId));
+
+        Deck deck = card.getDeck();
+
+        if (!deck.getId().equals(deckId)) {
+            throw new CardNotFoundException(cardId);
+        }
+
+        if (!deck.getCreatedBy().getId().equals(userId)) {
+            throw new UnauthorizedDeckAccessException();
+        }
+
+        CardRequest cardRequest = new CardRequest();
+        cardRequest.setQuestion(card.getQuestion());
+        cardRequest.setAnswer(card.getAnswer());
+        cardRequest.setLink(card.getLink());
+        cardRequest.setIsDifficult(card.isDifficult());
+
+        return cardRequest;
+    }
+
+    @Transactional
+    public void editCard(CardRequest cardRequest, UUID cardId, UUID deckId, UUID userId) {
+        Card card = cardRepository.findById(cardId)
+                .orElseThrow(() -> new CardNotFoundException(cardId));
+
+        Deck deck = card.getDeck();
+
+        if (!deck.getId().equals(deckId)) {
+            throw new CardNotFoundException(cardId);
+        }
+
+        if (!deck.getCreatedBy().getId().equals(userId)) {
+            throw new UnauthorizedDeckAccessException();
+        }
+
+        card.setQuestion(cardRequest.getQuestion());
+        card.setAnswer(cardRequest.getAnswer());
+        card.setLink(cardRequest.getLink());
+        card.setDifficult(cardRequest.getIsDifficult());
+        card.setUpdatedOn(LocalDateTime.now());
+
+        cardRepository.save(card);
+        deckService.updateDeck(deck);
+    }
+
+    @Transactional
+    public void deleteCard(UUID cardId, UUID deckId, UUID userId) {
+        Card card = cardRepository.findById(cardId)
+                .orElseThrow(() -> new CardNotFoundException(cardId));
+
+        Deck deck = card.getDeck();
+
+        if (!deck.getId().equals(deckId)) {
+            throw new CardNotFoundException(cardId);
+        }
+
+        if (!deck.getCreatedBy().getId().equals(userId)) {
+            throw new UnauthorizedDeckAccessException();
+        }
+
+        cardRepository.delete(card);
+        deckService.updateDeck(deck);
+    }
+
+    public void validateDeckOwner(UUID deckId, UUID userId) {
+        Deck deck = deckService.getDeckById(deckId);
+
+        if (!deck.getCreatedBy().getId().equals(userId)) {
+            throw new UnauthorizedDeckAccessException();
+        }
+    }
+    //ToDo Add Study/View Only one card option
+
+    //ToDo Add options to get most liked decks
 }

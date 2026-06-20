@@ -9,5 +9,7 @@ import java.util.UUID;
 
 @Repository
 public interface CardRepository extends JpaRepository<Card, UUID> {
+    List<Card> findAllByDeckId(UUID deckId);
 
+    List<Card> findAllCardsByDeckId(UUID deckId);
 }
