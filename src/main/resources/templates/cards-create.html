@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <h1>Create your new card</h1>
+    <form th:object="${cardRequest}" th:method="post" th:action="@{/decks/{id}/cards/create(id=${deckId})}" >
+        <div >
+            <label>Card Question</label>
+            <input type="text" th:field="*{question}" >
+            <span th:if="${#fields.hasErrors('question')}" class="error-msg">&#9888; Invalid question.</span>
+
+
+        </div>
+        <div>
+            <label>Card Answer</label>
+            <input type="text" th:field="*{answer}" >
+            <span th:if="${#fields.hasErrors('answer')}" class="error-msg">&#9888; Invalid answer.</span>
+
+        </div>
+        <div>
+            <label>Link to the source of your answer (Optional)</label>
+            <input type="text" th:field="*{link}" >
+        </div>
+        <div>
+            <label>Mark Card as difficult?</label>
+            <div>
+                <input type="radio" th:field="*{isDifficult}" value="true" id="difficultCard">
+                <label for="difficultCard">Yes</label>
+            </div>
+
+            <div>
+                <input type="radio" th:field="*{isDifficult}" value="false" id="easyCard">
+                <label for="easyCard">No</label>
+                <p th:if="${#fields.hasErrors('isDifficult')}"
+                   th:errors="*{isDifficult}"
+                   style="color: red;"></p>
+            </div>
+        </div>
+        <button type="submit" name="action" value="save-and-back">
+            Save and go back
+        </button>
+
+        <button type="submit" name="action" value="save-and-add-another">
+            Save and add another
+        </button>
+    </form>
+
+
+    <a th:href="@{/decks/{id}(id=${deckId})}" >[Cancel]</a>
+
+</body>
+</html>

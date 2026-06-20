@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Card — QuizCards</title>
+
+    <link rel="stylesheet" th:href="@{/css/card-form.css}">
+</head>
+<body>
+
+<header class="site-header">
+    <a th:href="@{/home}" class="logo">
+        <span class="logo-icon">Q</span>
+        <span>QuizCards</span>
+    </a>
+
+    <a th:href="@{/decks/{id}(id=${deckId})}" class="header-link">Back to deck</a>
+</header>
+
+<main class="form-page">
+    <section class="form-card">
+        <div class="form-header">
+            <p class="eyebrow">Edit card</p>
+            <h1>Update this flashcard.</h1>
+            <p>
+                Improve the question, update the answer, change the source link,
+                or mark whether this card needs extra practice.
+            </p>
+        </div>
+
+        <form th:object="${cardRequest}"
+              method="post"
+              th:action="@{/decks/{deckId}/cards/{cardId}(deckId=${deckId}, cardId=${cardId})}"
+              class="card-form">
+
+            <input type="hidden" name="_method" value="PUT">
+
+            <div class="form-group">
+                <label for="question">Card question</label>
+
+                <textarea id="question"
+                          rows="4"
+                          placeholder="What does MVC stand for?"
+                          th:field="*{question}"
+                          th:classappend="${#fields.hasErrors('question')} ? 'input-error' : ''"></textarea>
+
+                <span class="field-error"
+                      th:if="${#fields.hasErrors('question')}"
+                      th:errors="*{question}">
+                    Question error
+                </span>
+            </div>
+
+            <div class="form-group">
+                <label for="answer">Card answer</label>
+
+                <textarea id="answer"
+                          rows="4"
+                          placeholder="Model — View — Controller"
+                          th:field="*{answer}"
+                          th:classappend="${#fields.hasErrors('answer')} ? 'input-error' : ''"></textarea>
+
+                <span class="field-error"
+                      th:if="${#fields.hasErrors('answer')}"
+                      th:errors="*{answer}">
+                    Answer error
+                </span>
+            </div>
+
+            <div class="form-group">
+                <label for="link">Source link <span>Optional</span></label>
+
+                <input id="link"
+                       type="text"
+                       placeholder="https://example.com"
+                       th:field="*{link}"
+                       th:classappend="${#fields.hasErrors('link')} ? 'input-error' : ''">
+
+                <span class="field-error"
+                      th:if="${#fields.hasErrors('link')}"
+                      th:errors="*{link}">
+                    Link error
+                </span>
+            </div>
+
+            <div class="form-group">
+                <label>Mark card as difficult?</label>
+
+                <div class="radio-grid">
+                    <label class="radio-card" for="difficultCard">
+                        <input id="difficultCard"
+                               type="radio"
+                               th:field="*{isDifficult}"
+                               value="true">
+
+                        <span>
+                            <strong>Yes</strong>
+                            <small>This card needs extra practice.</small>
+                        </span>
+                    </label>
+
+                    <label class="radio-card" for="easyCard">
+                        <input id="easyCard"
+                               type="radio"
+                               th:field="*{isDifficult}"
+                               value="false">
+
+                        <span>
+                            <strong>No</strong>
+                            <small>This card is normal for now.</small>
+                        </span>
+                    </label>
+                </div>
+
+                <span class="field-error"
+                      th:if="${#fields.hasErrors('isDifficult')}"
+                      th:errors="*{isDifficult}">
+                    Difficulty error
+                </span>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">
+                    Save Changes
+                </button>
+
+                <a th:href="@{/decks/{id}(id=${deckId})}" class="btn btn-secondary">
+                    Cancel
+                </a>
+            </div>
+        </form>
+
+        <form th:action="@{/decks/{deckId}/cards/{cardId}(deckId=${deckId}, cardId=${cardId})}"
+              method="post"
+              class="delete-form"
+              onsubmit="return confirm('Are you sure you want to delete this card?');">
+
+            <input type="hidden" name="_method" value="DELETE">
+
+            <button type="submit" class="btn btn-danger">
+                Delete Card
+            </button>
+        </form>
+    </section>
+
+    <section class="preview-panel" aria-label="Card preview">
+        <div class="preview-card preview-card-back"></div>
+
+        <div class="preview-card preview-card-front">
+            <span class="tag">Editing</span>
+
+            <h2 th:text="${cardRequest.question}">
+                Card question
+            </h2>
+
+            <div class="mini-info">
+                <span>Answer</span>
+                <p th:text="${cardRequest.answer}">
+                    Card answer preview.
+                </p>
+            </div>
+
+            <div class="mini-stats">
+                <div>
+                    <strong th:text="${cardRequest.isDifficult} ? 'Difficult' : 'Normal'">
+                        Normal
+                    </strong>
+                    <span>Difficulty</span>
+                </div>
+
+                <div>
+                    <strong>Source</strong>
+                    <span th:text="${#strings.isEmpty(cardRequest.link)} ? 'None' : 'Added'">
+                        Optional
+                    </span>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer class="site-footer">
+    <span>&copy; 2026 QuizCards &mdash; SoftUni Project</span>
+</footer>
+
+</body>
+</html>
