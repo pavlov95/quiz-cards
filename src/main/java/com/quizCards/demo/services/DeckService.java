@@ -55,7 +55,7 @@ public class DeckService {
     @Transactional
     public void deleteDeck(UUID deckId, UUID userId) {
         Deck deck = deckRepository.findById(deckId)
-                .orElseThrow(() -> new DeckNotFoundException(deckId));
+                .orElseThrow(DeckNotFoundException::new);
 
         if (!deck.getCreatedBy().getId().equals(userId)) {
             throw new UnauthorizedDeckAccessException();
@@ -65,7 +65,7 @@ public class DeckService {
     }
 
     public void editDeck(DeckRequest deckRequest, UUID deckId, UUID userId) {
-        Deck deck = deckRepository.findById(deckId).orElseThrow(() -> new DeckNotFoundException(deckId));
+        Deck deck = deckRepository.findById(deckId).orElseThrow(DeckNotFoundException::new);
         if(!deck.getCreatedBy().getId().equals(userId)){
            throw new UnauthorizedDeckAccessException();
         }
@@ -78,7 +78,7 @@ public class DeckService {
 
     public DeckRequest getDeckRequestForEdit(UUID deckId, UUID userId) {
         Deck deck = deckRepository.findById(deckId)
-                .orElseThrow(() -> new DeckNotFoundException(deckId));
+                .orElseThrow(DeckNotFoundException::new);
 
         if (!deck.getCreatedBy().getId().equals(userId)) {
             throw new UnauthorizedDeckAccessException();
