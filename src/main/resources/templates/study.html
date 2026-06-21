@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Study Deck — QuizCards</title>
+
+    <link rel="stylesheet" th:href="@{/css/study.css}">
+</head>
+<body>
+
+<header class="site-header">
+    <a th:href="@{/home}" class="logo">
+        <span class="logo-icon">Q</span>
+        <span>QuizCards</span>
+    </a>
+
+    <nav class="nav-actions">
+        <a th:href="@{/decks/{deckId}(deckId=${deckId})}" class="nav-link">Back to deck</a>
+        <a th:href="@{/logout}" class="nav-button">Logout</a>
+    </nav>
+</header>
+
+<main class="study-page">
+
+    <section class="study-hero">
+        <div>
+            <p class="eyebrow">Study mode</p>
+            <h1>Choose how you want to study.</h1>
+            <p class="study-description">
+                Focus on all cards, only difficult cards, or normal cards.
+                Open each card answer when you are ready.
+            </p>
+        </div>
+
+        <a th:href="@{/decks/{deckId}(deckId=${deckId})}" class="btn btn-secondary">
+            Back to Deck
+        </a>
+    </section>
+
+    <section class="mode-section">
+        <a th:href="@{/decks/{deckId}/study(deckId=${deckId}, type='all')}"
+           class="mode-card"
+           th:classappend="${type == 'all'} ? ' active' : ''">
+
+            <span class="mode-icon">A</span>
+
+            <span>
+                <strong>Study all cards</strong>
+                <small>Review every card in this deck.</small>
+            </span>
+        </a>
+
+        <a th:href="@{/decks/{deckId}/study(deckId=${deckId}, type='difficult')}"
+           class="mode-card"
+           th:classappend="${type == 'difficult'} ? ' active' : ''">
+
+            <span class="mode-icon warning">!</span>
+
+            <span>
+                <strong>Study difficult cards</strong>
+                <small>Focus only on cards marked as difficult.</small>
+            </span>
+        </a>
+
+        <a th:href="@{/decks/{deckId}/study(deckId=${deckId}, type='normal')}"
+           class="mode-card"
+           th:classappend="${type == 'normal'} ? ' active' : ''">
+
+            <span class="mode-icon normal">N</span>
+
+            <span>
+                <strong>Study normal cards</strong>
+                <small>Review cards that are not marked difficult.</small>
+            </span>
+        </a>
+    </section>
+
+    <section class="cards-section">
+        <div class="section-header">
+            <div>
+                <h2>Cards</h2>
+                <p th:text="${type != null} ? 'Current mode: ' + ${type} : 'Choose a study mode to begin.'">
+                    Current mode: all
+                </p>
+            </div>
+
+            <span class="count-badge" th:if="${cards != null}" th:text="${#lists.size(cards)} + ' cards'">
+                0 cards
+            </span>
+        </div>
+
+        <div th:if="${cards == null}" class="empty-state">
+            <div class="empty-icon">?</div>
+            <h3>Select a mode</h3>
+            <p>Choose one of the study options above to start reviewing cards.</p>
+        </div>
+
+        <div th:if="${cards != null and cards.isEmpty()}" class="empty-state">
+            <div class="empty-icon">0</div>
+            <h3>No cards available</h3>
+            <p>There are no cards available for this study mode.</p>
+        </div>
+
+        <div th:if="${cards != null and !cards.isEmpty()}" class="study-grid">
+            <article class="study-card" th:each="card : ${cards}">
+                <div class="card-top">
+                    <span class="card-badge"
+                          th:classappend="${card.difficult} ? ' difficult' : ' normal'"
+                          th:text="${card.difficult} ? 'Difficult' : 'Normal'">
+                        Normal
+                    </span>
+                </div>
+
+                <h3>Question</h3>
+
+                <p class="question-text" th:text="${card.question}">
+                    Question here
+                </p>
+
+                <details>
+                    <summary>Show answer</summary>
+                    <p th:text="${card.answer}">
+                        Answer here
+                    </p>
+                </details>
+
+                <a th:if="${!#strings.isEmpty(card.link)}"
+                   th:href="${card.link}"
+                   target="_blank"
+                   class="resource-link">
+                    Open resource
+                </a>
+            </article>
+        </div>
+    </section>
+
+</main>
+
+<footer class="site-footer">
+    <span>&copy; 2026 QuizCards &mdash; SoftUni Project</span>
+</footer>
+
+</body>
+</html>
