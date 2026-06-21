@@ -2,54 +2,220 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Create Card — QuizCards</title>
+
+    <link rel="stylesheet" th:href="@{/css/card-form.css}">
 </head>
 <body>
-    <h1>Create your new card</h1>
-    <form th:object="${cardRequest}" th:method="post" th:action="@{/decks/{id}/cards/create(id=${deckId})}" >
-        <div >
-            <label>Card Question</label>
-            <input type="text" th:field="*{question}" >
-            <span th:if="${#fields.hasErrors('question')}" class="error-msg">&#9888; Invalid question.</span>
 
+<header class="site-header">
+    <a th:href="@{/home}" class="logo">
+        <span class="logo-icon">Q</span>
+        <span>QuizCards</span>
+    </a>
 
-        </div>
-        <div>
-            <label>Card Answer</label>
-            <input type="text" th:field="*{answer}" >
-            <span th:if="${#fields.hasErrors('answer')}" class="error-msg">&#9888; Invalid answer.</span>
+    <a th:href="@{/decks/{id}(id=${deckId})}" class="header-link">
+        Back to deck
+    </a>
+</header>
 
+<main class="form-page">
+
+    <section class="form-card">
+
+        <div class="form-header">
+            <p class="eyebrow">New flashcard</p>
+
+            <h1>Create a new card</h1>
+
+            <p>
+                Add a question and answer to continue building your deck.
+            </p>
         </div>
-        <div>
-            <label>Link to the source of your answer (Optional)</label>
-            <input type="text" th:field="*{link}" >
-        </div>
-        <div>
-            <label>Mark Card as difficult?</label>
-            <div>
-                <input type="radio" th:field="*{isDifficult}" value="true" id="difficultCard">
-                <label for="difficultCard">Yes</label>
+
+        <form
+                th:object="${cardRequest}"
+                method="post"
+                th:action="@{/decks/{id}/cards/create(id=${deckId})}"
+                class="card-form">
+
+            <div class="form-group">
+                <label for="question">
+                    Card question
+                </label>
+
+                <textarea
+                        id="question"
+                        th:field="*{question}"
+                        rows="4"
+                        placeholder="For example: What is dependency injection?"
+                        th:classappend="${#fields.hasErrors('question')} ? 'input-error'"
+                        autofocus></textarea>
+
+                <p
+                        th:if="${#fields.hasErrors('question')}"
+                        th:errors="*{question}"
+                        class="field-error">
+                    Invalid question.
+                </p>
             </div>
 
-            <div>
-                <input type="radio" th:field="*{isDifficult}" value="false" id="easyCard">
-                <label for="easyCard">No</label>
-                <p th:if="${#fields.hasErrors('isDifficult')}"
-                   th:errors="*{isDifficult}"
-                   style="color: red;"></p>
+            <div class="form-group">
+                <label for="answer">
+                    Card answer
+                </label>
+
+                <textarea
+                        id="answer"
+                        th:field="*{answer}"
+                        rows="6"
+                        placeholder="Write the answer or explanation here..."
+                        th:classappend="${#fields.hasErrors('answer')} ? 'input-error'"></textarea>
+
+                <p
+                        th:if="${#fields.hasErrors('answer')}"
+                        th:errors="*{answer}"
+                        class="field-error">
+                    Invalid answer.
+                </p>
             </div>
+
+            <div class="form-group">
+                <label for="link">
+                    Source link
+                    <span>(Optional)</span>
+                </label>
+
+                <input
+                        id="link"
+                        type="url"
+                        th:field="*{link}"
+                        placeholder="https://example.com/article"
+                        th:classappend="${#fields.hasErrors('link')} ? 'input-error'">
+
+                <p
+                        th:if="${#fields.hasErrors('link')}"
+                        th:errors="*{link}"
+                        class="field-error">
+                    Invalid source link.
+                </p>
+            </div>
+
+            <div class="form-group">
+                <label>
+                    Card difficulty
+                </label>
+
+                <div class="radio-grid">
+
+                    <label class="radio-card" for="easyCard">
+                        <input
+                                id="easyCard"
+                                type="radio"
+                                th:field="*{isDifficult}"
+                                value="false">
+
+                        <span>
+                            <strong>Regular</strong>
+                            <small>
+                                I am comfortable with this topic
+                            </small>
+                        </span>
+                    </label>
+
+                    <label class="radio-card" for="difficultCard">
+                        <input
+                                id="difficultCard"
+                                type="radio"
+                                th:field="*{isDifficult}"
+                                value="true">
+
+                        <span>
+                            <strong>Difficult</strong>
+                            <small>
+                                This card needs extra attention
+                            </small>
+                        </span>
+                    </label>
+
+                </div>
+
+                <p
+                        th:if="${#fields.hasErrors('isDifficult')}"
+                        th:errors="*{isDifficult}"
+                        class="field-error">
+                    Please select the card difficulty.
+                </p>
+            </div>
+
+            <div class="form-actions">
+
+                <a
+                        th:href="@{/decks/{id}(id=${deckId})}"
+                        class="btn btn-secondary">
+                    Cancel
+                </a>
+
+                <button
+                        type="submit"
+                        name="action"
+                        value="save-and-back"
+                        class="btn btn-dark">
+                    Save and go back
+                </button>
+
+                <button
+                        type="submit"
+                        name="action"
+                        value="save-and-add-another"
+                        class="btn btn-primary">
+                    Save and add another
+                </button>
+
+            </div>
+
+        </form>
+
+    </section>
+
+    <aside class="preview-panel" aria-hidden="true">
+
+        <div class="preview-card preview-card-back"></div>
+
+        <div class="preview-card preview-card-front">
+
+            <span class="tag">New card</span>
+
+            <h2>Build knowledge one card at a time.</h2>
+
+            <div class="mini-info">
+                <span>Question</span>
+                <p>What will you learn today?</p>
+            </div>
+
+            <div class="mini-stats">
+                <div>
+                    <strong>Q</strong>
+                    <span>Question</span>
+                </div>
+
+                <div>
+                    <strong>A</strong>
+                    <span>Answer</span>
+                </div>
+            </div>
+
         </div>
-        <button type="submit" name="action" value="save-and-back">
-            Save and go back
-        </button>
 
-        <button type="submit" name="action" value="save-and-add-another">
-            Save and add another
-        </button>
-    </form>
+    </aside>
 
+</main>
 
-    <a th:href="@{/decks/{id}(id=${deckId})}" >[Cancel]</a>
+<footer class="site-footer">
+    <span>&copy; 2026 QuizCards &mdash; SoftUni Project</span>
+</footer>
 
 </body>
 </html>
