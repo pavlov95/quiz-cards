@@ -114,6 +114,30 @@ public class CardService {
         deckService.updateDeck(deck);
     }
 
+    public List<Card> getCardsForStudy(UUID deckId, String type, UUID userId) {
+        Deck deck = deckService.getDeckById(deckId);
+
+        if (!deck.isPublic() && !deck.getCreatedBy().getId().equals(userId)) {
+            throw new UnauthorizedDeckAccessException();
+        }
+
+        List<Card> cards = cardRepository.findAllCardsByDeckId(deckId);
+
+        return switch (type) {
+            case "difficult" -> cards.stream()
+                    .filter(Card::isDifficult)
+                    .toList();
+
+            case "normal" -> cards.stream()
+                    .filter(card -> !card.isDifficult())
+                    .toList();
+
+            case "all" -> cards;
+
+            default -> throw new IllegalArgumentException("Invalid study type: " + type);
+        };
+    }
+
     public void validateDeckOwner(UUID deckId, UUID userId) {
         Deck deck = deckService.getDeckById(deckId);
 
