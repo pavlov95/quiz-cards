@@ -90,5 +90,9 @@ public class IndexController {
         return modelAndView;
     }
 
-
+    @PostMapping("/logout")
+    public ModelAndView logout(HttpSession session) {
+        session.invalidate();
+        return new ModelAndView("redirect:/");
+    }
 }
