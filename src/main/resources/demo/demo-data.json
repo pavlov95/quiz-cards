@@ -1,0 +1,61 @@
+{
+  "decks": [
+    {
+      "name": "Java Fundamentals",
+      "description": "Variables, methods, conditions, loops and basic Java syntax.",
+      "publicDeck": true,
+      "cards": [
+        {
+          "question": "What is the difference between == and equals() in Java?",
+          "answer": "The == operator compares primitive values or object references, while equals() normally compares object content.",
+          "link": "https://docs.oracle.com/javase/tutorial/java/IandI/objectclass.html",
+          "difficult": false
+        },
+        {
+          "question": "What is method overloading?",
+          "answer": "Method overloading means declaring multiple methods with the same name but different parameter lists.",
+          "link": null,
+          "difficult": false
+        },
+        {
+          "question": "What does the final keyword do?",
+          "answer": "It can prevent reassignment of variables, overriding of methods, or inheritance from classes.",
+          "link": null,
+          "difficult": true
+        }
+      ]
+    },
+    {
+      "name": "Spring Boot",
+      "description": "Core Spring Boot concepts, dependency injection and configuration.",
+      "publicDeck": true,
+      "cards": [
+        {
+          "question": "What does @SpringBootApplication combine?",
+          "answer": "It combines @Configuration, @EnableAutoConfiguration and @ComponentScan.",
+          "link": "https://docs.spring.io/spring-boot/reference/using/using-the-springbootapplication-annotation.html",
+          "difficult": false
+        },
+        {
+          "question": "What is dependency injection?",
+          "answer": "Dependency injection means supplying an object's dependencies from outside instead of creating them inside the object.",
+          "link": null,
+          "difficult": false
+        }
+      ]
+    },
+    {
+      "name": "Private Revision Notes",
+      "description": "Personal topics that require additional revision.",
+      "publicDeck": false,
+      "cards": [
+        {
+          "question": "Which topic should I revise next?",
+          "answer": "Review transaction management and entity relationships.",
+          "link": null,
+          "difficult": true
+        }
+      ]
+    }
+  ]
+}

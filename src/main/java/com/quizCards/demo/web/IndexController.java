@@ -13,6 +13,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 import java.util.UUID;
@@ -42,12 +43,14 @@ public class IndexController {
     }
 
     @PostMapping("/register")
-    public String register(@Valid RegisterRequest registerRequest, BindingResult bindingResult) {
+    public String register(@Valid RegisterRequest registerRequest, BindingResult bindingResult
+            , RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
             return "register";
         }
         userService.register(registerRequest);
-
+        redirectAttributes.addFlashAttribute
+                ( "successMessage", "Registration successful! You can now log in." );
         return "redirect:/login";
 
     }

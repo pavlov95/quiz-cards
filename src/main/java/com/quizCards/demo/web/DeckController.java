@@ -1,7 +1,9 @@
 package com.quizCards.demo.web;
 
 import com.quizCards.demo.entities.Deck;
+import com.quizCards.demo.entities.Role;
 import com.quizCards.demo.services.DeckService;
+import com.quizCards.demo.services.UserService;
 import com.quizCards.demo.web.dto.DeckRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -16,9 +18,11 @@ import java.util.UUID;
 @RequestMapping("/decks")
 public class DeckController {
     private final DeckService deckService;
+    private final UserService userService;
 
-    public DeckController(DeckService deckService) {
+    public DeckController(DeckService deckService, UserService userService) {
         this.deckService = deckService;
+        this.userService = userService;
     }
 
     @GetMapping("/create")
@@ -46,11 +50,15 @@ public class DeckController {
 
         Deck deck = deckService.getDeckById(id);
 
+
+
         boolean isOwner = deck.getCreatedBy().getId().equals(userId);
+        boolean isAdmin =userService.findUserById(userId).getRole() ==Role.ADMIN;
 
         ModelAndView modelAndView = new ModelAndView("deck-details");
         modelAndView.addObject("deck", deck);
         modelAndView.addObject("isOwner", isOwner);
+        modelAndView.addObject("isAdmin", isAdmin);
 
         return modelAndView;
     }
@@ -94,8 +102,6 @@ public class DeckController {
 
         return modelAndView;
     }
-
-
 
 
 }

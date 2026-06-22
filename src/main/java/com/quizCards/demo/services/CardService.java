@@ -145,6 +145,10 @@ public class CardService {
             throw new UnauthorizedDeckAccessException();
         }
     }
+
+    public void updateAll(List<Card> cards) {
+        cardRepository.saveAll(cards);
+    }
     //ToDo Add Study/View Only one card option
 
     //ToDo Add options to get most liked decks

@@ -1,6 +1,7 @@
 package com.quizCards.demo.services;
 
 import com.quizCards.demo.entities.Deck;
+import com.quizCards.demo.entities.Role;
 import com.quizCards.demo.entities.User;
 import com.quizCards.demo.exceptions.DeckNotFoundException;
 import com.quizCards.demo.exceptions.UnauthorizedDeckAccessException;
@@ -56,10 +57,8 @@ public class DeckService {
     public void deleteDeck(UUID deckId, UUID userId) {
         Deck deck = deckRepository.findById(deckId)
                 .orElseThrow(DeckNotFoundException::new);
-
-        if (!deck.getCreatedBy().getId().equals(userId)) {
-            throw new UnauthorizedDeckAccessException();
-        }
+        User user = userService.findUserById(userId);
+        validateDeletePermission(deck, user);
 
         deckRepository.delete(deck);
     }
@@ -95,5 +94,18 @@ public class DeckService {
     public void updateDeck(Deck deck){
         deck.setUpdatedOn(LocalDateTime.now());
         deckRepository.save(deck);
+    }
+
+    private void validateDeletePermission(Deck deck, User user) {
+        boolean isOwner = deck.getCreatedBy()
+                .getId()
+                .equals(user.getId());
+
+        boolean isAdmin = user.getRole() == Role.ADMIN;
+        boolean adminCanDelete = isAdmin && deck.isPublic();
+
+        if (!isOwner && !adminCanDelete) {
+            throw new UnauthorizedDeckAccessException();
+        }
     }
 }

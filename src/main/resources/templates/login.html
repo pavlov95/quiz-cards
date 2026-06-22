@@ -25,7 +25,14 @@
             <h1>Sign in to your account.</h1>
             <p>Continue building decks, reviewing cards, and studying smarter.</p>
         </div>
-
+        <div th:if="${successMessage}" class="success-message">
+            <span aria-hidden="true">✓</span>
+            <span th:text="${successMessage}"></span>
+        </div>
+        <div th:if="${errorMessage}" class="error-message">
+            <span aria-hidden="true">⚠</span>
+            <span th:text="${errorMessage}"></span>
+        </div>
         <form th:action="@{/login}" method="post" th:object="${loginRequest}" class="auth-form">
 
             <div class="alert" th:if="${errorMessage}" th:text="${errorMessage}">

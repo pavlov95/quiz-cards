@@ -55,8 +55,15 @@ public class UserService {
         }
         return user;
     }
+    public boolean existsByUsername(String username){
+        return userRepository.existsByUsername(username);
+    }
 
     public User findUserById(UUID userId){
         return userRepository.findById(userId).get();
+    }
+
+    public void updateUser(User user) {
+        userRepository.save(user);
     }
 }
