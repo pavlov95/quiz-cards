@@ -29,57 +29,47 @@ public class IndexController {
 
 
     @GetMapping()
-    public ModelAndView getIndexPage() {
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("index");
-
-        return modelAndView;
+    public String getIndexPage() {
+        return "index";
     }
 
     @GetMapping("/register")
     public ModelAndView getRegisterPage() {
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("register");
-
+        ModelAndView modelAndView = new ModelAndView("register");
         modelAndView.addObject("registerRequest", new RegisterRequest());
 
         return modelAndView;
     }
 
     @PostMapping("/register")
-    public ModelAndView register(@Valid RegisterRequest registerRequest, BindingResult bindingResult) {
+    public String register(@Valid RegisterRequest registerRequest, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return new ModelAndView("register");
+            return "register";
         }
         userService.register(registerRequest);
 
-        return new ModelAndView("redirect:/login");
+        return "redirect:/login";
 
     }
 
     @GetMapping("/login")
     public ModelAndView getLoginPage() {
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("login");
+        ModelAndView modelAndView = new ModelAndView("login");
         modelAndView.addObject("loginRequest", new LoginRequest());
         return modelAndView;
     }
 
     @PostMapping("/login")
-    public ModelAndView login(LoginRequest loginRequest, HttpSession httpSession) {
-
-        UUID id = (UUID) httpSession.getAttribute("user_id");
-
+    public String login(LoginRequest loginRequest, HttpSession httpSession) {
         User user = userService.login(loginRequest);
         httpSession.setAttribute("user_id", user.getId());
-        return new ModelAndView("redirect:/home");
+        return "redirect:/home";
     }
 
     @GetMapping("/home")
     public ModelAndView getHomePage(HttpSession httpSession) {
         UUID userId = (UUID) httpSession.getAttribute("user_id");
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("home");
+        ModelAndView modelAndView = new ModelAndView("home");
 
         List<Deck> myDecks = deckService.getDecksByUser(userId);
         modelAndView.addObject("myDecks", myDecks);
@@ -91,8 +81,8 @@ public class IndexController {
     }
 
     @PostMapping("/logout")
-    public ModelAndView logout(HttpSession session) {
+    public String logout(HttpSession session) {
         session.invalidate();
-        return new ModelAndView("redirect:/");
+        return "redirect:/";
     }
 }

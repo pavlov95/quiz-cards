@@ -1,8 +1,8 @@
 package com.quizCards.demo.security;
 
-import com.quizCards.demo.services.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
@@ -11,24 +11,34 @@ import java.util.Set;
 @Component
 public class SessionInterceptor implements HandlerInterceptor {
 
-    public static final Set<String> UNAUTHENTICATED_ENDPOINTS = Set.of("/login", "/register", "/", "/logout", "/error");
     public static final String USER_ID_FROM_SESSION = "user_id";
-    private final UserService userService;
 
-    public SessionInterceptor(UserService userService) {
-        this.userService = userService;
-    }
+    private static final Set<String> PUBLIC_ENDPOINTS = Set.of(
+            "/",
+            "/login",
+            "/register",
+            "/error"
+    );
 
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+    public boolean preHandle(
+            HttpServletRequest request,
+            HttpServletResponse response,
+            Object handler) throws Exception {
 
-        String endpoint = request.getServletPath();
-        if (UNAUTHENTICATED_ENDPOINTS.contains(endpoint)) {
+        String endpoint = request.getRequestURI()
+                .substring(request.getContextPath().length());
+
+        if (PUBLIC_ENDPOINTS.contains(endpoint)) {
             return true;
         }
 
-        if (request.getSession(false) == null || request.getSession(false).getAttribute(USER_ID_FROM_SESSION) == null) {
-            response.sendRedirect("/");
+        HttpSession session = request.getSession(false);
+
+        if (session == null ||
+                session.getAttribute(USER_ID_FROM_SESSION) == null) {
+
+            response.sendRedirect(request.getContextPath() + "/");
             return false;
         }
 

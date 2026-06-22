@@ -1,7 +1,6 @@
 package com.quizCards.demo.config;
 
 import com.quizCards.demo.security.SessionInterceptor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -9,14 +8,21 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class WebConfiguration implements WebMvcConfigurer {
 
-    @Autowired
-    private SessionInterceptor sessionInterceptor;
+    private final SessionInterceptor sessionInterceptor;
+
+    public WebConfiguration(SessionInterceptor sessionInterceptor) {
+        this.sessionInterceptor = sessionInterceptor;
+    }
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-
         registry.addInterceptor(sessionInterceptor)
                 .addPathPatterns("/**")
-                .excludePathPatterns("/css/**");
+                .excludePathPatterns(
+                        "/css/**",
+                        "/js/**",
+                        "/images/**",
+                        "/favicon.ico"
+                );
     }
 }

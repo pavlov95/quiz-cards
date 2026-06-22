@@ -22,9 +22,7 @@ public class DeckController {
     }
 
     @GetMapping("/create")
-    public ModelAndView getDecksPage() {
-
-
+    public ModelAndView getCreateDecksPage() {
         ModelAndView modelAndView = new ModelAndView("deck-create");
         modelAndView.addObject("deckRequest", new DeckRequest());
 

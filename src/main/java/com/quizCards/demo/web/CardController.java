@@ -21,7 +21,7 @@ public class CardController {
     }
 
     @GetMapping("/create")
-    public ModelAndView getCardsPage(@PathVariable UUID deckId,
+    public ModelAndView getCreateCardsPage(@PathVariable UUID deckId,
                                      HttpSession httpSession) {
         UUID userId = (UUID) httpSession.getAttribute("user_id");
 
